@@ -9,6 +9,8 @@ use for my personal wikis, instead of the previous, very hacky and messy thing
 I made out of a WikiClone called WabiSabi (which appears to be no longer
 online). So I came up with this, which I call the PurpleTreeWiki.
 
+An example is online [here](http://thepurpletree.uk/v1/).
+
 ## Attribution
 Everything except for [Parsedown](https://github.com/erusev/parsedown),
 [Highlight.js](https://highlightjs.org/), and the [image uploader](https://artisansweb.net/drag-drop-file-upload-using-javascript-php/) was written by me and is released under the MitLicense.
