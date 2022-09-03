@@ -1,0 +1,6 @@
+RewriteEngine On
+RewriteBase /example/
+RewriteRule ^/?$ wiki.php [L]
+RewriteCond %{QUERY_STRING} ^$
+RewriteRule ^([A-Z][a-zA-Z0-9]*[A-Z][a-zA-Z0-9]*)$ wiki.php?word=$1 [L]
+RewriteRule ^([A-Z][a-zA-Z0-9]*[A-Z][a-zA-Z0-9]*)$ wiki.php?word=$1&%{QUERY_STRING} [L]

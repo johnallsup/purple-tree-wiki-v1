@@ -1,0 +1,2 @@
+A WikiWord is a string beginning with a CapitalLetter, and containing characters a-z, A-Z, 0-9, and containing at least one more CapitalLetter.
+So AWikiWord is AWordLikeThis OrLikeThis, so hopefully YouGetThePicture. Any WikiWord is automatically turned into a link to a page of the same name by the WikiEngine.

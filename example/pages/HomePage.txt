@@ -1,0 +1,3 @@
+# Purple Tree Wiki
+This is a simple WikiClone written in around 800-1000 lines of PHP, HTML, CSS and Javascript (apart
+from the Parsedown and Highlight.js libraries used for formatting).

@@ -1,0 +1,7 @@
+## Hello World e
+Hello world. This is a simple WikiSite. 
+Aside from the markdown renderer, Parsedown, which is about 2000 lines of PHP, and hightlight.min.js which is about 1100 lines of Javascript, the rest is just over 800 lines of PHP. Very simple. Very quick to edit. To be authorised to edit, you visit a page in a secret location, possibly enter credentials like a username and password, and that will set an authorisation cookie which the wiki engine will check for before saving.
+
+This is very much a WikiWebsite in the spirit of the original WikiWikiWeb by WardCunningham. WikiWord's are words beginning with a capital letter and which contain at least one more capital letter. They are automatically turned into links to a page of the same name. If that page does not exist, a stub is created.
+
+Pages are written in Markdown (see ExampleMarkdown for some examples), which is rendered by [Parsedown](https://github.com/erusev/parsedown). Code is syntax-highlighted by [this javascript](hightlight.min.js) from [hightlightjs.org](https://highlightjs.org/download/). To edit a page, press shift-` (i.e. shift-backtick) to switch to edit mode. When in view mode, you can press V to see previous versions, and when viewing versions, you can press Escape to get back to view mode. That's it.

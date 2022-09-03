@@ -1,0 +1,2 @@
+# C
+This wiki is about the C programming language.

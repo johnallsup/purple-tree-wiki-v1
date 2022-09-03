@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<!-- 
+  Purple Tree Wiki v1
+ 
+  (c) John Allsup 2021-2022
+  https://john.allsup.co
+ 
+  Distributed under the MIT License.
+ 
+  For the full license information, view the LICENSE file that was distributed
+  with this source code.
+-->
+<html>
+<meta charset='utf8'/>
+<title>MyWiki - WIKI_WORD - edit</title>
+<style>
+.error {
+  color: red;
+}
+textarea {
+  width: 95vw;
+  height: 70vh;
+}
+</style>
+<script>
+const q = x => document.querySelector(x)
+window.addEventListener("keydown", e => {
+  if( e.code === "Backquote" && e.shiftKey ) {
+    e.preventDefault()
+    q("form").submit()
+  }
+})
+</script>
+</head>
+<body>
+<h1>WIKI_WORD</h1>
+WIKI_ERROR_MESSAGE<form method='post' action='WIKI_WORD?action=edit'>
+<textarea name='source' cols='80' rows='25' autofocus>
+WIKI_PAGE_SOURCE
+</textarea><br/>
+</form>
+<footer>
+<a href='images/' target="_blank">Images available here</a> &mdash; 
+<a href='http://thepurpletree.uk/'>The Purple Tree</a> 2022<br/>
+Press shift-` to save. This site uses a simple cookie upon a successful save so as to not repeatedly ask for the password. If you are not happy with that, do not save.
+</footer>
+</body>
+</html>
