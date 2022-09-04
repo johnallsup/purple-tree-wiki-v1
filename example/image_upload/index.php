@@ -14,11 +14,20 @@ if( ! $auth->auth_ok(array()) ) {
 <head>
 <meta charset='utf8'/>
 <title>Image upload</title>
+<link rel="icon" type="image/x-icon" href="../purple_tree_wiki_favicon.png"/>
+<script>
+window.addEventListener("keydown",e => {
+  if( e.key == "Escape" ) {
+    e.preventDefault()
+    window.location = ".."
+  }
+})
+</script>
 </head>
 <body>
 <link rel="stylesheet" href="style.css" />
 <div>
-Name: <input id="drop_file_name" cols="80"/>
+Name: <input autofocus id="drop_file_name" cols="80"/>
 </div>
 <div id="drop_file_zone" ondrop="upload_file(event)" ondragover="return false">
     <div id="drag_upload_file">
