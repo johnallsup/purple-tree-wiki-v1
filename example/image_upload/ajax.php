@@ -1,4 +1,5 @@
 <?php
+define('IMAGE_LIMIT',1024);
 #
 # Code adapted from https://artisansweb.net/drag-drop-file-upload-using-javascript-php/
 #
@@ -17,6 +18,7 @@ if (!(in_array($_FILES['file']['type'], $arr_file_types))) {
 }
 
 define('IMAGE_DIR','../images');
+define('PUBLIC_IMAGE_DIR','images');
 if (!file_exists(IMAGE_DIR)) {
     mkdir(IMAGE_DIR, 0755);
 }
@@ -37,12 +39,23 @@ $ext = preg_replace("/^.*\.([^\.]*)$/","\\1",$_FILES['file']['name']);
   
 # enusre that no matter what extension is provided via the text input, the file gets the right one.
 $ofn = IMAGE_DIR."/$filename.$ext";
+$pfn = PUBLIC_IMAGE_DIR."/$filename.$ext";
 if( file_exists($ofn) ) {
   unlink($ofn);
 }
 
+$existing_images = 
+  glob(IMAGE_DIR."/*.png") + 
+  glob(IMAGE_DIR."/*.jpg") + 
+  glob(IMAGE_DIR."/*.jpeg") + 
+  glob(IMAGE_DIR."/*.gif");
+$n_existing_images = count($existing_images);
+if( $n_existing_images >= IMAGE_LIMIT ) {
+  echo "Too many images";
+  die;
+}
 if( move_uploaded_file($_FILES['file']['tmp_name'], $ofn) ) {
-  echo $ofn."?".time();
+  echo "$pfn?".time();
   die;
 } else {
   echo "Failed to move";

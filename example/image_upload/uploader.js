@@ -34,13 +34,14 @@ function ajax_file_upload(file_obj) {
                 if( this.responseText.match(/^images/) ) {
                   const fn = this.responseText
                   const fnx = fn.split("?")[0]
-                  oOutput.innerHTML = `Uploaded to: ${fnx}<br/>\n<img src='${fn}' alt='${fn}' />`
+                  oOutput.innerHTML = `Uploaded to: ${fnx}<br/>\n<img src='../${fn}' alt='${fn}' />`
                 } else {
                   oOutput.innerHTML = `Error: ${this.responseText}`
                 }
             } else {
                 oOutput.innerHTML = "Error " + xhttp.status + " occurred when trying to upload your file.";
             }
+            q("#drop_file_name").focus()
         }
  
         xhttp.send(form_data);
