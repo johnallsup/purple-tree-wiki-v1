@@ -38,7 +38,7 @@ class WikiStorageFlatFileVersions extends WikiStorage {
     }
   }
   public function store($word,$src): void {
-    $src = preg_replace('~\R~u', "\r\n", $src); // Fix CRLF
+    $src = preg_replace('~\R~u', "\r\n", $src); # Fix CRLF
 
     $page_filename = $this->path_for_word($word);
     file_put_contents($page_filename,trim($src));
@@ -67,17 +67,11 @@ class WikiStorageFlatFileVersions extends WikiStorage {
   }
   public function get_version($word,$version) {
     $files = glob("versions/$word.$version.txt");
-    if( count($files) > 0 ) { // array has 0 or 1 entries
+    if( count($files) > 0 ) { # array from glob has 0 or 1 entries
       return file_get_contents($files[0]);
     } else {
-      // This can only happen if either:
-      // someone via ssh deletes a version between the call
-      // to versions() and to get_version(), or
-      // uses something like postman to generate the request.
       echo "Version $version of word $word does not exist.";
       exit();
-      // better error reporting, and possibly AJAX
-      // is for later.
     }
   }
 }

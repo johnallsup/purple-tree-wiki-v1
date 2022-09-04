@@ -17,14 +17,9 @@ class WikiRendererParsedown1 extends WikiRenderer {
   public function __construct() {
   }
   public function render_view(array $vars): void {
-    // transform WIKI_PAGE_SOURCE to WIKI_PAGE_BODY
-    // all we do here is wiki words to links.
     $word = $vars["WIKI_WORD"];
     $source = $vars["WIKI_PAGE_SOURCE"];
     
-    // the callbacks may generate protected strings
-    // protected strings should _never_ be matched
-    // by search strings provided to this preg_replace call
     $result = preg_replace_callback_array(array(WIKIWORD_REGEX => [$this,"WikiWord_to_link"]),$source);
     $vars['WIKI_PAGE_SOURCE'] = $result;
     $this->render_view_real($vars);
@@ -50,11 +45,6 @@ class WikiRendererParsedown1 extends WikiRenderer {
     $this->render_template($template,$vars);
   }
   public function render_versions(array $vars): void {
-    // list of version numbers as WIKI_VERSIONS
-    // generate body and hand off to render_view
-    // necessary to do this here since wiki engine does
-    // not know the source formatting language for
-    // renderer
     $versions = $vars['WIKI_VERSIONS'];
     $word = $vars['WIKI_WORD'];
     $body = "";
@@ -75,7 +65,6 @@ class WikiRendererParsedown1 extends WikiRenderer {
   }
 
   private function protect(string $content): string {
-    // this is to allow us to prevent further search/replace
     $key = sprintf("WIKI_PROTECT_%08d",$this->protect_count++);
     $this->protected[$key] = $content;
     return $key;
@@ -89,7 +78,7 @@ class WikiRendererParsedown1 extends WikiRenderer {
   }
   private function render_template(string $template, array $vars): void {
     foreach($vars as $key => $value) {
-      if( is_string($value) ) { // silently ignore array vars
+      if( is_string($value) ) { # silently ignore array vars
         $template = str_replace($key,$value,$template);
       }
     }

@@ -21,7 +21,6 @@ class WikiAuthByCookie extends WikiAuth {
     $this->cookie_value = $cookie["value"];
   }
   public function auth_ok($vars): bool {
-    // check cookie, if good return true
     if( $this->check_cookie() ) {
       return true;
     }

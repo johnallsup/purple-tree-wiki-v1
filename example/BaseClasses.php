@@ -27,6 +27,5 @@ abstract class WikiStorage {
   public abstract function count_pages(): int;
   public abstract function get_versions(string $word): array;
   public abstract function get_version(string $word, int $version);
-    // public abstract function get_versions($word); // returns an array of ints
-  // public abstract function get_version($word,$version);
+  public abstract function page_exists(string $word);
 }

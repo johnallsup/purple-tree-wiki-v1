@@ -14,15 +14,13 @@
 include("gencookie.php");
 $cookie = gencookie();
 
-// set cookie
 if(isset($_COOKIE[$cookie['name']])) {
-//  echo "Have cookie";
   $got = $_COOKIE[$cookie['name']];
   if( strcmp($got,$cookie['value']) == 0 ) {
-    echo "Du bist willkommen!";
+    echo "You may edit";
   } else {
-    echo "The heavy door does not budge.";
+    echo "Your cookie is incorrect";
   }
 } else {
-  echo "You need to find the magic cookie.";
+  echo "You do not have a cookie";
 }
