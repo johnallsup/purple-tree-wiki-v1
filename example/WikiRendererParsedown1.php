@@ -1,27 +1,22 @@
 <?php
-#
-# Purple Tree Wiki v1
-#
-# (c) John Allsup 2021-2022
-# https://john.allsup.co
-#
-# Distributed under the MIT License.
-#
-# For the full license information, view the LICENSE file that was distributed
-# with this source code.
-#
 include_once("BaseClasses.php");
 include_once("Parsedown.php");
 
 class WikiRendererParsedown1 extends WikiRenderer {
   public function __construct() {
+    $this->protected = array();
+    $this->protected_prefix = strtolower(hash("sha256",time()));
   }
   public function render_view(array $vars): void {
     $word = $vars["WIKI_WORD"];
     $source = $vars["WIKI_PAGE_SOURCE"];
     
-    $result = preg_replace_callback_array(array(WIKIWORD_REGEX => [$this,"WikiWord_to_link"]),$source);
-    $vars['WIKI_PAGE_SOURCE'] = $result;
+    $source = preg_replace_callback(URL_REGEX,[$this,"protect_cb"],$source);
+    $source = preg_replace_callback(WIKIWORD_REGEX, [$this,"WikiWord_to_link"],$source);
+    foreach($this->protected as $id => $string) {
+      $source = str_replace($id,$string,$source);
+    }
+    $vars['WIKI_PAGE_SOURCE'] = $source;
     $this->render_view_real($vars);
   }
   public function render_view_real(array $vars): void {
@@ -63,11 +58,13 @@ class WikiRendererParsedown1 extends WikiRenderer {
     $template = file_get_contents("versions_template_md.html");
     $this->render_template($template,$vars);
   }
-
   private function protect(string $content): string {
-    $key = sprintf("WIKI_PROTECT_%08d",$this->protect_count++);
+    $key = $this->protected_prefix.sprintf("_%08d",$this->protect_count++); # generate unique string
     $this->protected[$key] = $content;
     return $key;
+  }
+  private function protect_cb(array $match): string {
+    return $this->protect($match[0]);
   }
   private function WikiWord_to_link(array $match): string {
     $word = $match[0];
