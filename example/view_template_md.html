@@ -8,9 +8,14 @@
 <link rel="stylesheet" href="a11y-dark.css"/>
 <script src="highlight.min.js"></script>
 <script>
-const keys = { }
-window.addEventListener('load', _ => {
+const init = _ => {
+  const { log } = console
+  const q = x => document.querySelector(x)
   const qq = x => Array.from(document.querySelectorAll(x))
+
+  let dialogVisible = false
+  const keys = { }
+
   const links_with_keys = qq("a[shortcut]")
   links_with_keys.forEach(link => {
     const shortcut = link.getAttribute("shortcut")
@@ -21,43 +26,96 @@ window.addEventListener('load', _ => {
   })
   keys['v'] = undefined
   keys['h'] = "HomePage"
-})
-window.addEventListener('keydown', e => {
-  const q = x => document.querySelector(x)
-  if( e.ctrlKey || e.altKey ) {
-    return true
+
+  // create dialog
+  const dialog = document.createElement("div")
+  const form = document.createElement("form")
+  const location_input = document.createElement("input")
+  dialog.appendChild(form)
+  form.appendChild(location_input)
+  dialog.classList.add("popup")
+  dialog.classList.add("goto-dialog")
+  document.body.appendChild(dialog)
+  dialog.style.display = "none"
+
+  // methods to show and hide dialog
+  const showDialog = _ => {
+    log(showDialog)
+    dialog.style.display = "block"
+    dialogVisible = true
+    location_input.focus()
   }
-  if( e.code === "Backquote" && e.shiftKey) {
+  const hideDialog = _ => {
+    log(hideDialog)
+    dialog.style.display = "none"
+    dialogVisible = false
+  }
+
+  // what happens when we press enter
+  form.addEventListener("submit", e => {
+    log("submit")
     e.preventDefault()
-    const [ uri, query_string ] = window.location.href.split("?",2)
-    const map = new Map()
-    map.set('action','edit')
-    if( query_string ) {
-      const args = query_string.split("&")
-      args.forEach(arg => {
-        const [ k, v ] = arg.split("=",2)
-        map.set(k,v)
-      })
+    const target = location_input.value
+    if( target.match(/^[A-Z][a-zA-Z0-9]*[A-Z][a-zA-Z0-9]*$/) ) {
+      // is a valid WikiWord
+      window.location.href = target
     }
-    const new_query_array = []
-    map.forEach(console.log)
-    map.forEach((v,k) => new_query_array.push(`${k}=${v}`))
-    const new_query_string = new_query_array.join("&")
-    // strip off query string, if any version is specified
-    // we want to pass this to edit
-    const new_uri = `${uri}?${new_query_string}`
-    // check for version= in query string and pass that to edit
-    // we need to pass version to action=edit when saving too.
-    // we 
-    window.location.href = new_uri
-  } else if(e.key === "v") {
-    const new_uri = q('#versions_link').getAttribute('href')
-    window.location.href = new_uri
-  } else if(keys[e.key]) {
-    window.location.href = keys[e.key]
-  }
-})
-hljs.highlightAll()
+  })
+
+  // key handler
+  window.addEventListener("keydown",e => {
+    if( e.altKey || e.metaKey || e.ctrlKey ) return true
+    if( e.key === "Escape" && dialogVisible ) {
+      e.preventDefault()
+      return hideDialog()
+    }
+    if( dialogVisible ) return true
+    if( e.key == "G" && ! dialogVisible ) {
+      e.preventDefault()
+      return showDialog()
+    }
+    if( e.code === "Backquote" && e.shiftKey) {
+      e.preventDefault()
+      const [ uri, query_string ] = window.location.href.split("?",2)
+      const map = new Map()
+      map.set('action','edit')
+      if( query_string ) {
+        const args = query_string.split("&")
+        args.forEach(arg => {
+          const [ k, v ] = arg.split("=",2)
+          map.set(k,v)
+        })
+      }
+      const new_query_array = []
+      map.forEach(console.log)
+      map.forEach((v,k) => new_query_array.push(`${k}=${v}`))
+      const new_query_string = new_query_array.join("&")
+      // strip off query string, if any version is specified
+      // we want to pass this to edit
+      const new_uri = `${uri}?${new_query_string}`
+      // check for version= in query string and pass that to edit
+      // we need to pass version to action=edit when saving too.
+      // we 
+      window.location.href = new_uri
+      return
+    }
+    if(e.key === "v") {
+      e.preventDefault()
+      const new_uri = q('#versions_link').getAttribute('href')
+      window.location.href = new_uri
+      return
+    }
+    if(keys[e.key]) {
+      e.preventDefault()
+      window.location.href = keys[e.key]
+      return
+    }
+    return true // pass all other keys through
+  })
+  hljs.highlightAll()
+}
+
+window.addEventListener("load",init)
 </script>
 </head>
 <body>
