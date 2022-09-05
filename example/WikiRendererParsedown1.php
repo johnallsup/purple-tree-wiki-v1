@@ -12,6 +12,8 @@ class WikiRendererParsedown1 extends WikiRenderer {
     $source = $vars["WIKI_PAGE_SOURCE"];
     
     $source = preg_replace_callback(URL_REGEX,[$this,"protect_cb"],$source);
+    $source = preg_replace_callback("/^(```(.*?)^```)/ms",[$this,"protect_cb"],$source);
+    $source = preg_replace_callback("/(`+)(.*?)(\\1)/s",[$this,"protect_cb"],$source);
     $source = preg_replace_callback(WIKIWORD_REGEX, [$this,"WikiWord_to_link"],$source);
     foreach($this->protected as $id => $string) {
       $source = str_replace($id,$string,$source);
