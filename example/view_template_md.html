@@ -67,12 +67,19 @@ const init = _ => {
     if( e.altKey || e.metaKey || e.ctrlKey ) return true
     if( e.key === "Escape" && dialogVisible ) {
       e.preventDefault()
-      return hideDialog()
+      hideDialog()
+      return false
     }
     if( dialogVisible ) return true
-    if( e.key == "G" && ! dialogVisible ) {
+    if( e.key === "G" ) {
       e.preventDefault()
-      return showDialog()
+      showDialog()
+      return false
+    }
+    if( e.key === "I" ) {
+      e.preventDefault()
+      window.location.href = "image_upload"
+      return false
     }
     if( e.code === "Backquote" && e.shiftKey) {
       e.preventDefault()
