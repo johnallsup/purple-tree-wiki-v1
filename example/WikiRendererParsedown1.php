@@ -12,6 +12,7 @@ class WikiRendererParsedown1 extends WikiRenderer {
     $source = $vars["WIKI_PAGE_SOURCE"];
     
     $source = preg_replace_callback(URL_REGEX,[$this,"protect_cb"],$source);
+    $source = preg_replace_callback("/^(```nohighlight\\s(.*?)^```)/ms",[$this,"protect_nohighlight_cb"],$source);
     $source = preg_replace_callback("/^(```(.*?)^```)/ms",[$this,"protect_cb"],$source);
     $source = preg_replace_callback("/(`+)(.*?)(\\1)/s",[$this,"protect_cb"],$source);
     $source = preg_replace_callback(WIKIWORD_REGEX, [$this,"WikiWord_to_link"],$source);
@@ -67,6 +68,9 @@ class WikiRendererParsedown1 extends WikiRenderer {
   }
   private function protect_cb(array $match): string {
     return $this->protect($match[0]);
+  }
+  private function protect_nohighlight_cb(array $match): string {
+    return $this->protect($match[2]);
   }
   private function WikiWord_to_link(array $match): string {
     $word = $match[0];
