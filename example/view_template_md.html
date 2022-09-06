@@ -56,10 +56,7 @@ const init = _ => {
     log("submit")
     e.preventDefault()
     const target = location_input.value
-    if( target.match(/^[A-Z][a-zA-Z0-9]*[A-Z][a-zA-Z0-9]*$/) ) {
-      // is a valid WikiWord
-      window.location.href = target
-    }
+    window.location.href = target // user's fault if they enter something wrong
   })
 
   // key handler
@@ -71,12 +68,27 @@ const init = _ => {
       return false
     }
     if( dialogVisible ) return true
+    if( e.key === "/" ) {
+      e.preventDefault()
+      window.location.href = "/"
+      return false
+    }
     if( e.key === "G" ) {
       e.preventDefault()
       showDialog()
       return false
     }
     if( e.key === "I" ) {
+      e.preventDefault()
+      window.location.href = "Index"
+      return false
+    }
+    if( e.key === "R" ) {
+      e.preventDefault()
+      window.location.href = "Recent"
+      return false
+    }
+    if( e.key === "U" ) {
       e.preventDefault()
       window.location.href = "image_upload"
       return false
@@ -120,6 +132,19 @@ const init = _ => {
     return true // pass all other keys through
   })
   hljs.highlightAll()
+  const embed_youtube_callback = (m,a) => {
+    return `<iframe width='420' height='315'
+    src='https://www.youtube.com/embed/${a}'>
+    </iframe>
+    `
+  }
+  const convert_embedded_youtube = _ => {
+    const content_div = q("#content")
+    let x = content_div.innerHTML
+    x = x.replace(/\[\[youtube:(.{11})\]\]/,embed_youtube_callback)
+    content_div.innerHTML = x
+  }
+  convert_embedded_youtube()
 }
 
 window.addEventListener("load",init)

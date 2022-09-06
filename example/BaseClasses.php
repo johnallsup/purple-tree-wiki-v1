@@ -1,15 +1,4 @@
 <?php
-#
-# Purple Tree Wiki v1
-#
-# (c) John Allsup 2021-2022
-# https://john.allsup.co
-#
-# Distributed under the MIT License.
-#
-# For the full license information, view the LICENSE file that was distributed
-# with this source code.
-#
 abstract class WikiEngine {
   public abstract function go();
 }
@@ -28,4 +17,7 @@ abstract class WikiStorage {
   public abstract function get_versions(string $word): array;
   public abstract function get_version(string $word, int $version);
   public abstract function page_exists(string $word);
+  public abstract function get_recent(int $n);
+  public abstract function get_all_words();
+  public abstract function get_mtime(string $word);
 }

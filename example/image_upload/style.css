@@ -2,6 +2,10 @@
  * Code adapted from https://artisansweb.net/drag-drop-file-upload-using-javascript-php/
 */
 #drop_file_zone {
+  margin-left: auto;
+  margin-left: auto;
+  margin-right: auto;
+  margin-right: auto;
     background-color: #EEE;
     border: #999 5px dashed;
     width: 290px;
@@ -18,4 +22,61 @@
 }
 #drag_upload_file #selectfile {
   display: none;
+}
+body {
+  font-family: 'Adobe Caslon Pro', serif;
+  background-color: #036;
+  padding: 1em;
+}
+.content {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 1em;
+  box-shadow: 15px 15px 15px black;
+  background-color: white;
+  border: 1px solid black;
+}
+.content p {
+  margin-left: 20%;
+  margin-right: 20%;
+  font-size: 1.2em;
+}
+.input-area {
+  margin: 0.3em;
+}
+.input-area .label {
+  font-size: 1.5em;
+}
+.input-area input {
+  font-size: 1.8em;
+  font-family: sans-serif;
+  padding: 0.1em;
+  margin: 2px;
+  border: 1px solid black;
+}
+.input-area input:focus {
+  background-color: #ffd;;
+  border: 3px solid black;
+  margin: 0px;
+}
+.img-upload-result {
+}
+.img-upload-text {
+  margin: 1em;
+}
+.img-upload-result .message {
+  color: black;
+  font-size: 1.3em;
+}
+.img-upload-result .filename {
+  display: none;
+  margin: 0.5em;
+  font-size: 1.6em;
+  font-weight: bold;
+  font-family: sans-serif;
+  padding: 0.5em;
+  border: 1px solid black;
+  box-shadow: 15px 15px 15px black;
+  background-color: #fec;
 }

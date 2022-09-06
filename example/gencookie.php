@@ -15,7 +15,7 @@ function gencookie() {
   $Sugar = "vixafT#TJ8JqAjzB";
   $Cookie_Duration = 60*60*24*30;
   $Cookie_Name="ToastRiseExitOrchestra";
-  $date = date("W"); # changes weekly
+  $date = date("YW"); # changes weekly
   $hash = hash("sha256",$Sugar.$date,true);
   $Cookie_Value = base64_encode($hash);
   return array(

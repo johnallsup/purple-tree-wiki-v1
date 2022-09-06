@@ -1,19 +1,8 @@
 <!DOCTYPE html>
-<!-- 
-  Purple Tree Wiki v1
- 
-  (c) John Allsup 2021-2022
-  https://john.allsup.co
- 
-  Distributed under the MIT License.
- 
-  For the full license information, view the LICENSE file that was distributed
-  with this source code.
--->
 <html>
 <meta charset='utf8'/>
-<title>MyWiki - WIKI_WORD - edit</title>
-<link rel="icon" type="image/x-icon" href="purple_tree_wiki_favicon.png"/>
+<title>Wiki WIKI_SUBDIR - WIKI_WORD - edit</title>
+<link rel="icon" type="image/x-icon" href="/purple_tree_wiki_favicon.png"/>
 <style>
 .error {
   color: red;
@@ -22,13 +11,30 @@ textarea {
   width: 95vw;
   height: 70vh;
 }
+html {
+  background-color: #fe0;
+}
+footer {
+  font-size: 1.3em;
+}
+footer a {
+  text-decoration: none;
+  color: #007;
+  font-weight: bold;
+}
 </style>
 <script>
 const q = x => document.querySelector(x)
 window.addEventListener("keydown", e => {
   if( e.code === "Backquote" && e.shiftKey ) {
+    // Save
     e.preventDefault()
     q("form").submit()
+  } else if( e.code === "Escape" ) {
+    // Abort edit
+    e.preventDefault()
+    const [ uri, query_string ] = window.location.href.split("?",2)
+    window.location.href = uri
   }
 })
 </script>
@@ -42,6 +48,7 @@ WIKI_PAGE_SOURCE
 </form>
 <footer>
 <a href='images/' target="_blank">Images available here</a> &mdash; 
+<a href='image_upload/' target="_blank">Image upload here</a> &mdash; 
 <a href='http://thepurpletree.uk/'>The Purple Tree</a> 2022<br/>
 Press shift-` to save. This site uses a simple cookie upon a successful save so as to not repeatedly ask for the password. If you are not happy with that, do not save.
 </footer>

@@ -1,15 +1,4 @@
 <?php
-#
-# Purple Tree Wiki v1
-#
-# (c) John Allsup 2021-2022
-# https://john.allsup.co
-#
-# Distributed under the MIT License.
-#
-# For the full license information, view the LICENSE file that was distributed
-# with this source code.
-#
 include_once("WikiDefs.php");
 include_once("BaseClasses.php");
 include_once("NullAuth.php");
@@ -27,12 +16,11 @@ class WikiEngine2 extends WikiEngine {
       "WIKI_PAGE_SOURCE" => "",
       "WIKI_ERROR_STRING" => "",
     );
-
   }
   public function go(): void {
     if( array_key_exists("word",$this->options) ) {
       $word = $this->options["word"];
-      if( ! preg_match(WIKIWORD_REGEX,$word) ) {
+      if( ! preg_match(WIKIWORD_REGEX,$word) && $word != "Recent" && $word != "Index" ) {
         header("Location: NotAWikiWord", true, 303);
         exit();      
       }
@@ -43,6 +31,8 @@ class WikiEngine2 extends WikiEngine {
     }
   
     $this->vars["WIKI_WORD"] = $word;
+    $this->vars["WIKI_SUBDIR"] = trim(dirname($_SERVER['PHP_SELF']),"/"); 
+    $this->get_navbar();
 
     if( array_key_exists("action",$this->options) ) {
       $action = $this->options["action"];
@@ -51,6 +41,14 @@ class WikiEngine2 extends WikiEngine {
     }
     $this->vars["WIKI_ACTION"] = $action;
 
+    if( $word == "Index" ) {
+      $this->render_index();
+      return;
+    }
+    if( $word == "Recent" ) {
+      $this->render_recent();
+      return;
+    }
     $method = "action_$action";
     if( method_exists($this,$method) ) {
       $this->$method();
@@ -58,6 +56,35 @@ class WikiEngine2 extends WikiEngine {
     } else {
       echo "Invalid action";
       exit();
+    }
+  }
+  private function format_navbar($navbar_source): string {
+    $src = trim($navbar_source);
+    if( strlen($src) > 0 ) {
+      $links = preg_split("/\\s+/",$src);
+      $t = "<ul class='navbar'>\n";
+      foreach($links as $link) {
+        if( preg_match("/^(.*)\\[([a-z0-9])\\]$/",$link,$m) ) {
+          $w = $m[1];
+          $k = $m[2];
+          $t .= "<li><a href='$w' shortcut='$k'>$link</a></li>\n";
+        } else {
+          $t .= "<li><a href='$w'>$link</a></li>\n";
+        }
+      }
+      $t .= "</ul>";
+      return $t;
+    } else {
+      return "";
+    }
+  }
+  private function get_navbar(): void {
+    if( $this->storage->page_exists("NavBar") ) {
+      $navbar_source = $this->storage->get("NavBar");
+      $navbar_html = $this->format_navbar($navbar_source);
+      $this->vars['NAVBAR'] = $navbar_html;
+    } else {
+      $this->vars['NAVBAR'] = "";
     }
   }
   private function get_source(): void {
@@ -69,6 +96,24 @@ class WikiEngine2 extends WikiEngine {
     }
     if( $src == null ) $src = $this->default_src($word);
     $this->vars['WIKI_PAGE_SOURCE'] = $src;
+  }
+  private function render_index(): void {
+    $words = $this->storage->get_all_words();
+    foreach($words as $word) {
+      $md .= "* $word\n";
+    }
+    $this->vars['WIKI_PAGE_SOURCE'] = $md;
+    $this->renderer->render_view($this->vars);
+  }
+  private function render_recent(): void {
+    $words = $this->storage->get_recent(50);
+    foreach($words as $word) {
+      $mtime = $this->storage->get_mtime($word);
+      $fmtime = strftime("%c",$mtime);
+      $md .= "* $word *($fmtime)*\n";
+    }
+    $this->vars['WIKI_PAGE_SOURCE'] = $md;
+    $this->renderer->render_view($this->vars);
   }
   private function action_view(): void {
     $this->get_source();
@@ -92,7 +137,6 @@ class WikiEngine2 extends WikiEngine {
     $word = $this->vars["WIKI_WORD"];
     $this->get_source();
     $old_src = trim($this->vars["WIKI_PAGE_SOURCE"]);
-    
     if( array_key_exists("source", $_POST)) {
       $this->vars["WIKI_PAGE_SOURCE"] = trim($_POST["source"]);
     } else {
@@ -126,7 +170,6 @@ class WikiEngine2 extends WikiEngine {
       return;
     }
   }
-
   private function redirect_to_view() : void {
     $uri = strtok($_SERVER["REQUEST_URI"],"?");
     header("Location: $uri", true, 303);

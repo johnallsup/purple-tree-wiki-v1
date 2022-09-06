@@ -2,6 +2,10 @@
 include_once("BaseClasses.php");
 include_once("Parsedown.php");
 
+/*
+"/\[\[youtube:(.{11})\]\]/"
+P
+*/
 class WikiRendererParsedown1 extends WikiRenderer {
   public function __construct() {
     $this->protected = array();
@@ -11,6 +15,7 @@ class WikiRendererParsedown1 extends WikiRenderer {
     $word = $vars["WIKI_WORD"];
     $source = $vars["WIKI_PAGE_SOURCE"];
     
+    $source = preg_replace_callback(YOUTUBE_REGEX,[$this,"protect_youtube"],$source);
     $source = preg_replace_callback(URL_REGEX,[$this,"protect_cb"],$source);
     $source = preg_replace_callback("/^(```nohighlight\\s(.*?)^```)/ms",[$this,"protect_nohighlight_cb"],$source);
     $source = preg_replace_callback("/^(```(.*?)^```)/ms",[$this,"protect_cb"],$source);
@@ -71,6 +76,9 @@ class WikiRendererParsedown1 extends WikiRenderer {
   }
   private function protect_nohighlight_cb(array $match): string {
     return $this->protect($match[2]);
+  }
+  private function protect_youtube(array $match): string {
+    return $this->protect($match[0]);
   }
   private function WikiWord_to_link(array $match): string {
     $word = $match[0];
