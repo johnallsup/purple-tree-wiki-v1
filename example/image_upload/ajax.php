@@ -1,8 +1,20 @@
 <?php
+#
+# Some code adapted from https://artisansweb.net/drag-drop-file-upload-using-javascript-php/
+# No copyright claimed on that. License for this code is unclear.
+#
+#
+# Purple Tree Wiki v1
+#
+# (c) John Allsup 2021-2022
+# https://john.allsup.co
+#
+# Distributed under the MIT License.
+#
+# For the full license information, view the LICENSE file that was distributed
+# with this source code.
+#
 define('IMAGE_LIMIT',1024);
-#
-# Code adapted from https://artisansweb.net/drag-drop-file-upload-using-javascript-php/
-#
 include_once("../WikiAuthByCookie.php");
 $auth = new WikiAuthByCookie();
 if( ! $auth->auth_ok(array()) ) {
